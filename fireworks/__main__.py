@@ -35,22 +35,25 @@ class FireworksWindow(pyglet.window.Window):
             anchor_x='center', anchor_y='top')
         label.draw()
 
-firework_set = [Firework, Firework, SuperFirework]
-
-window = FireworksWindow([
-    choice(firework_set)(Vec2(random() * 1.5 - 0.75, 0), Vec2(random() * 0.1 - 0.05, random() * 0.25 + 0.25), (255, 255, 255), randint(1, 5)) for _ in range(randint(5, 20))
-])
-
 
 def update(dt):
     window.dt = dt
     window.particles = flatten(map(lambda p: p.update(dt, Vec2(0, -0.1), window), window.particles))
-    # if random() > 0.9:
-    #     window.particles.append(choice(firework_set)(Vec2(random() * 1.5 - 0.75, 0), Vec2(random() * 0.1 - 0.05, random() * 0.25 + 0.25), (255, 255, 255), randint(1, 5)))
+    if random() > 0.9:
+        window.particles.append(choice(firework_set)(Vec2(random() * 1.5 - 0.75, 0), Vec2(random() * 0.1 - 0.05, random() * 0.25 + 0.25), (255, 255, 255), randint(1, 5)))
 
 
-pyglet.clock.schedule(update)
+def main():
+    global firework_set, window
+    firework_set = [Firework, Firework, SuperFirework]
+    window = FireworksWindow([
+                                 choice(firework_set)(Vec2(random() * 1.5 - 0.75, 0),
+                                                      Vec2(random() * 0.1 - 0.05, random() * 0.25 + 0.25),
+                                                      (255, 255, 255), randint(1, 5)) for _ in range(randint(5, 20))
+                                 ])
+    pyglet.clock.schedule(update)
+    pyglet.app.run()
 
 
 if __name__ == "__main__":
-    pyglet.app.run()
+    main()
